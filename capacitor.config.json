@@ -1,0 +1,7 @@
+{
+  "appId": "io.github.ironunderheaven",
+  "appName": "Iron Under Heaven",
+  "webDir": "web",
+  "backgroundColor": "#120e0c",
+  "android": { "backgroundColor": "#120e0c" }
+}

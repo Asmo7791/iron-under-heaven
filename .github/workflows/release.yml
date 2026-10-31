@@ -1,0 +1,100 @@
+name: Release apps
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm install
+      - name: Build the desktop app
+        run: npm run dist
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.os }}
+          path: |
+            release/*.exe
+            release/*.dmg
+            release/*.AppImage
+          if-no-files-found: error
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - name: Build the web app
+        run: python3 tools/build.py
+      - name: Add Capacitor
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+        run: |
+          npm install --no-save @capacitor/core@6.2.0 @capacitor/cli@6.2.0 @capacitor/android@6.2.0 @capacitor/assets@3.0.5
+          npx cap add android
+          cp build/icon.png assets/logo.png
+          npx capacitor-assets generate --android --iconBackgroundColor "#120e0c" --splashBackgroundColor "#120e0c" || echo "icon generation skipped"
+          npx cap sync android
+      - name: Build the APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk "../Iron-Under-Heaven-${GITHUB_REF_NAME}-Android.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: "*.apk"
+          if-no-files-found: error
+
+  publish:
+    needs: [desktop, android]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: out/**/*
+          body: |
+            **Iron Under Heaven · 天下之铁**: a forging story of the Warring States, in English, 简体中文, 繁體中文, 日本語, Español and Français.
+
+            Every man has been taken for the army except you, the smith. Mend broken weapons on the anvil, meet the nightly quota, earn your leave, and protect your family when you get home. Your choices at home lead to four different stages and eight endings.
+
+            Play in the browser: https://asmo7791.github.io/iron-under-heaven/
+
+            Download the file for your device:
+
+            - **Windows**: `Setup.exe` installs the game; `Portable.exe` runs without installing.
+            - **Mac**: the `.dmg`. The app is not signed, so the first time, right-click it in Applications and choose Open.
+            - **Linux**: the `.AppImage`. Make it executable, then run it.
+            - **Android**: the `.apk`. Open it on your phone and allow installs from this source.
+            - **iPhone / iPad**: open the web version in Safari, tap Share, then Add to Home Screen.

@@ -1,0 +1,32 @@
+{
+  "name": "iron-under-heaven",
+  "productName": "Iron Under Heaven",
+  "version": "1.1.0",
+  "description": "A forging story of the Warring States. Mend weapons for the war, earn your leave, and protect your family. Six languages, eight endings.",
+  "main": "electron/main.js",
+  "license": "UNLICENSED",
+  "author": "Kai",
+  "homepage": "https://asmo7791.github.io/iron-under-heaven/",
+  "scripts": {
+    "build": "python3 tools/build.py",
+    "check": "node tools/check-i18n.js",
+    "start": "npm run build && electron .",
+    "dist": "npm run build && electron-builder --publish never"
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "io.github.ironunderheaven",
+    "productName": "Iron Under Heaven",
+    "files": ["electron/**", "web/**", "package.json"],
+    "directories": { "output": "release", "buildResources": "build" },
+    "artifactName": "Iron-Under-Heaven-${version}-${os}-${arch}.${ext}",
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }, { "target": "portable", "arch": ["x64"] }], "icon": "build/icon.png" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "artifactName": "Iron-Under-Heaven-${version}-Setup.${ext}" },
+    "portable": { "artifactName": "Iron-Under-Heaven-${version}-Portable.${ext}" },
+    "mac": { "target": [{ "target": "dmg", "arch": ["universal"] }], "category": "public.app-category.games", "icon": "build/icon.png", "identity": null },
+    "linux": { "target": ["AppImage"], "category": "Game", "icon": "build/icon.png" }
+  }
+}

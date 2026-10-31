@@ -1,0 +1,7 @@
+node_modules/
+release/
+android/
+ios/
+dist/
+assets/logo.png
+.DS_Store

@@ -1,0 +1,45 @@
+<div class="app" id="app">
+  <header>
+    <div class="brand"><span class="han" id="brandHan" aria-hidden="true">鐵</span><h1><span data-i18n="ui.title">Iron Under Heaven</span><small id="hStage"></small></h1></div>
+    <div class="hud">
+      <div class="chip"><small data-i18n="hud.tour">Tour · day</small><b id="hTour">1 / 3</b></div>
+      <div class="chip"><small id="hQuotaLbl">Quota</small><b id="hQuota">0</b></div>
+      <div class="chip"><small data-i18n="hud.silver">Silver</small><b id="hGold">0</b></div>
+      <div class="chip"><small data-i18n="hud.merit">Merit</small><b id="hMerit">0</b></div>
+      <div class="chip" id="hWarnChip"><small data-i18n="hud.fails">Failed days</small><b id="hWarn">0 / 3</b></div>
+      <label class="langpick"><span class="sr" data-i18n="ui.language">Language</span><select id="langSel"></select></label>
+      <button class="iconbtn" id="muteBtn" aria-pressed="false">Sound on</button>
+    </div>
+  </header>
+
+  <aside class="left">
+    <div class="patron">
+      <div class="seal" id="seal" aria-hidden="true">鐵</div>
+      <div class="who"><b id="pName"></b><span id="pRole"></span></div>
+      <div class="say" id="speech" aria-live="polite">…</div>
+    </div>
+    <div class="box"><h3 data-i18n="ui.family">Your family</h3><div class="family" id="family"></div></div>
+    <div class="box"><h3 data-i18n="ui.charms">Charms and tools</h3><div class="relic-list" id="relicList"></div></div>
+  </aside>
+
+  <main class="stage">
+    <div class="canvas-wrap">
+      <canvas id="forge"></canvas>
+      <div class="swordname"><b id="swName">…</b><span id="swVal"></span></div>
+    </div>
+    <section class="panel" id="panel" aria-live="polite"></section>
+  </main>
+
+  <aside class="side">
+    <div><h3 data-i18n="ui.weapons">Today's weapons</h3><div class="rack" id="rack"></div></div>
+    <div class="ledger" id="ledger">
+      <h3 style="margin:0" data-i18n="ui.ledger">Tonight's quota</h3>
+      <div class="big"><span id="lgTotal">0</span> <span class="muted">/ <span id="lgQuota">0</span> <span data-i18n="ui.wen">wen</span></span></div>
+      <div class="bar" id="lgBar"><div style="width:0%"></div></div>
+      <div class="muted" data-i18n="ui.ledgerNote"></div>
+    </div>
+    <div class="muted howto" data-i18n-html="ui.howto"></div>
+  </aside>
+</div>
+
+<div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>
