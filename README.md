@@ -209,6 +209,6 @@ npm run dist                 # build a desktop installer for this computer
 
 **Adding a language:** copy `src/lang/en.js` to `src/lang/<code>.js` and translate the values, keeping every `{placeholder}`. Add the code to `LANGS` in `tools/build.py`, to `LANG_ORDER`, `LANG_NAMES` and `LOCALES` in `src/game.js`, and to the list in `tools/check-i18n.js`, then run the checker.
 
-**Publishing:** every push to `main` rebuilds the web version on GitHub Pages. Pushing a version tag such as `v1.1.0` builds Windows, Mac, Linux and Android in GitHub Actions and attaches them to a release.
+**Publishing:** every push to `main` rebuilds the web version on GitHub Pages. Running the **Release apps** workflow (Actions tab, *Run workflow*) or pushing a version tag such as `v1.1.0` builds Windows, Mac, Linux and Android in GitHub Actions and attaches them to a release.
 
 The game is a single page with no server and no tracking. Your progress is saved only on your own device.
